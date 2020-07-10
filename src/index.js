@@ -23,7 +23,7 @@ const startServer = async () => {
 
     await mongoose.connect(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
 
-    app.listen({ port: 3000 }, () =>
+    app.listen({ port: process.env.PORT || 3000 }, () =>
         console.log(`🚀 Server ready at http://localhost:3000${server.graphqlPath}`)
     );
 }
