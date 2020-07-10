@@ -1,0 +1,38 @@
+{
+  "name": "api-wepayu",
+  "version": "1.0.0",
+  "description": "A GraphQL-MongoDB API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "babel src --out-dir dist --copy-files",
+    "dev": "env-cmd nodemon --exec babel-node src/index.js",
+    "prod": "env-cmd node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mimescua/api-wepayu.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mimescua/api-wepayu/issues"
+  },
+  "homepage": "https://github.com/mimescua/api-wepayu#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.10.4",
+    "@babel/core": "^7.10.4",
+    "@babel/node": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "env-cmd": "^10.1.0",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.15.1",
+    "express": "^4.17.1",
+    "graphql": "^15.3.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.22"
+  }
+}
