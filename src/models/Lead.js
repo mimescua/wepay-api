@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const Lead = mongoose.model('Leads', {
+export const Lead = mongoose.model('leads', {
     _id: String,
     nombres: String,
     email: String,
