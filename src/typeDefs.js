@@ -7,7 +7,6 @@ export const typeDefs = gql`
     leads: [Lead!]!
     depositos: [Deposito!]!
     boletas: [Boleta!]!
-    pruebas: [Boleta!]!
   }
   type Lead {
     id: ID!
@@ -31,20 +30,34 @@ export const typeDefs = gql`
     id_pago: Int
     id_deposito: Int
     aprobar: String
+    pago: Pago
   }
   type Boleta {
     id: ID!
-    pagoId: String
+    dni: Int
+    nombres: String
+    apellidos: String
+    email: String
+    id_pago: String
+    id_boleta: String
+    marca_temporal: String
     servicio: String
     codigo: String
     contrasenia: String
-    monto: Float
-    vence: String
-    seleccionada: Boolean
-    estado: String
+    fecha_vencimiento: String
+    monto_de_pago_de_la_boleta: Float
+    aprobar: String
+    descuento: Float
+    monto_depositado: Float
   }
-
-  type Prueba {
+  type Pago {
     id: ID!
+    userId: String
+    createdAt: String
+    editable: Boolean
+    promoId: String
+    estado: String
+    voucher: String
+    operacion: String
   }
 `;
