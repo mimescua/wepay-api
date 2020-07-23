@@ -1,22 +1,22 @@
 import mongoose from "mongoose";
-import { Pago } from "./Pago";
+import { User } from "./User";
 
-export const Deposito = mongoose.model('depositos_sheet', {
+    
+export const Deposito = mongoose.model('archivoscomprobantesahorrador', {
     _id: String,
-    dni: String,
-    nombres: String,
-    apellidos: String,
-    codigo_operacion: String,
+    url: String,
+    name: String,
+    operacion: String,
     monto: String,
-    fecha_transaccion: String,
+    fecha: String,
     banco: String,
-    id_pago: String,
-    id_deposito: String,
-    aprobar: String,
-    pago: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref:'pagos'
-        }
-    ]
-},'depositos_sheet'); //Added because a singular collection name
+    pagoId: String,
+    userId: String,
+    aprobado: String,
+    created: String,
+    pendiente: String,
+    user: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'users'
+    }]
+},'archivoscomprobantesahorrador'); //Added because a singular collection name

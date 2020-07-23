@@ -1,18 +1,31 @@
 import mongoose from "mongoose";
 
-export const Boleta = mongoose.model('boletas_sheet', {
-    _id: String,
-    dni: String,
-    nombres: String,
-    apellidos: String,
-    email: String,
-    id_pago: String,
-    id_boleta: String,
-    marca_temporal: String,
-    servicio: String,
-    codigo: String,
-    contrasenia: String,
-    fecha_vencimiento: String,
-    monto_de_pago_de_la_boleta: String,
-    aprobar: String,
-},'boletas_sheet'); //Added because a singular collection name
+const Schema = mongoose.Schema;
+
+export const Boleta = mongoose.model('boletas', {
+    _id : String,
+    pagoId : String,
+    servicio : String,
+    codigo : String,
+    contrasenia : String,
+    monto : String,
+    vence : String,
+    seleccionada : String,
+    estado : String,
+    estadoRetirador : String,
+    retiroId : String,
+    user: [{
+        type: Schema.Types.ObjectId,
+        ref:'users'
+    }],
+    pago: [{
+        type: Schema.Types.ObjectId,
+        ref:'pagos'
+    }],
+    promocion: [{
+        type: Schema.Types.ObjectId,
+        ref:''
+    }],
+    descuento: String,
+    depositado: String,
+});

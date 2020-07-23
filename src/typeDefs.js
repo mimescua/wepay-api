@@ -18,37 +18,48 @@ export const typeDefs = gql`
     dni: String
     tipo: String
   }
+  type User {
+    id: ID
+    createdAt: String
+    username: String
+
+    nombre: String
+    apellido: String
+    dni: String
+  }
   type Deposito {
     id: ID!
-    dni: Int
-    nombres: String
-    apellidos: String
-    codigo_operacion: Int
-    monto: Float
-    fecha_transaccion: String
+    url: String
+    name: String
+    operacion: String
+    monto: String
+    fecha: String
     banco: String
-    id_pago: Int
-    id_deposito: Int
-    aprobar: String
-    pago: Pago
+    pagoId: String
+    userId: String
+    aprobado: String
+    created: String
+    pendiente: String
+    user: User
   }
   type Boleta {
     id: ID!
-    dni: Int
-    nombres: String
-    apellidos: String
-    email: String
-    id_pago: String
-    id_boleta: String
-    marca_temporal: String
+    pagoId: String
     servicio: String
     codigo: String
     contrasenia: String
-    fecha_vencimiento: String
-    monto_de_pago_de_la_boleta: Float
-    aprobar: String
+    monto: Float
+    vence: String
+    seleccionada: String
+    estado: String
+    estadoRetirador: String
+    retiroId: String
+    user: User
+    pago: Pago
+    promocion: Promocion
+
     descuento: Float
-    monto_depositado: Float
+    depositado: Float
   }
   type Pago {
     id: ID!
@@ -59,5 +70,11 @@ export const typeDefs = gql`
     estado: String
     voucher: String
     operacion: String
+  }
+  type Promocion {
+    id: ID!
+    codigo: String,
+    descuento: String,
+    tipo: Boolean
   }
 `;

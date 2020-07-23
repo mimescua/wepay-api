@@ -10,11 +10,7 @@ const pagoSchema = new Schema({
     promoId: String,
     estado: String,
     voucher: String,
-    operacion: String,
-    deposito: {
-        type: Schema.Types.ObjectId,
-        ref:'depositos_sheet'
-    }
+    operacion: String
 });
 
 export const Pago = mongoose.model('pagos', pagoSchema );
