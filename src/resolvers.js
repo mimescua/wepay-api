@@ -15,20 +15,35 @@ export const resolvers = {
       return Deposito.find()
         .then(async res => {
           const users = await User.find()
-          const depositos = res.map(deposito => {
+          const depositos  = res.reduce((acc, curr) => {
             let [topay] = users.filter(user => user.id === deposito.userId)
-            typeof topay !== "undefined" ? (
-              topay.id ? deposito.user.id = topay.id : deposito.user.id = "0",
-              deposito.user.createdAt = topay.createdAt,
-              deposito.user.username = topay.username,
+              typeof topay !== "undefined" ? (
+              topay.id ? curr.user.id = topay.id : curr.user.id = "0",
+              curr.user.createdAt = topay.createdAt,
+              curr.user.username = topay.username,
 
-              deposito.user.nombre = topay.profile.nombre,
-              deposito.user.apellido = topay.profile.apellido,
-              deposito.user.dni = topay.profile.dni
-              //curr_deposito = {...deposito, ...topay.id, ...topay.createdAt, ...topay.username, ...topay.profile.nombre, ...topay.profile.apellido, ...topay.profile.dni }
-            ) : deposito.user = {}//null
-            return deposito
-          })
+              curr.user.nombre = topay.profile.nombre,
+              curr.user.apellido = topay.profile.apellido,
+              curr.user.dni = topay.profile.dni
+              ) : deposito.user = {}//null
+
+              return [...acc, curr]
+          }, [])
+
+          //const depositos = res.map(deposito => {
+          //  let [topay] = users.filter(user => user.id === deposito.userId)
+          //  typeof topay !== "undefined" ? (
+          //    topay.id ? deposito.user.id = topay.id : deposito.user.id = "0",
+          //    deposito.user.createdAt = topay.createdAt,
+          //    deposito.user.username = topay.username,
+          //
+          //    deposito.user.nombre = topay.profile.nombre,
+          //    deposito.user.apellido = topay.profile.apellido,
+          //    deposito.user.dni = topay.profile.dni
+          //    //curr_deposito = {...deposito, ...topay.id, ...topay.createdAt, ...topay.username, ...topay.profile.nombre, ...topay.profile.apellido, ...topay.profile.dni }
+          //  ) : deposito.user = {}//null
+          //  return deposito
+          //})
           return depositos
         })
     },
@@ -52,7 +67,7 @@ export const resolvers = {
                 if (typeof curr_promo !== "undefined") {
                   let descuento = 0;
                   if (curr_promo.tipo === 'true') {
-                    descuento = (curr.monto * curr_promo.descuento) / 100
+                    descuento = (curr.monto * (curr_promo.descuento + 2)) / 100
                   }
                   else if (curr_promo.tipo === 'false') {
                     descuento = curr_promo.descuento
@@ -60,17 +75,16 @@ export const resolvers = {
                   curr.descuento = descuento
                   curr.depositado = curr.monto - descuento
                 }
-                curr.marca_temporal = curr_pago.createdAt.toLocaleString()
-
+                
                 curr_user.id ? curr.user.id = curr_user.id : curr.user.id = "0"
                 curr.user.createdAt = curr_user.createdAt
                 curr.user.username = curr_user.username
-                //console.log(curr_pago)
                 
                 curr.user.nombre = curr_user.profile.nombre
                 curr.user.apellido = curr_user.profile.apellido
                 curr.user.dni = curr_user.profile.dni
               }
+              curr.marca_temporal = curr_pago.createdAt.toLocaleString()
             }
             else curr.user = {}//null
 
