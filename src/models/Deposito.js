@@ -18,5 +18,6 @@ export const Deposito = mongoose.model('archivoscomprobantesahorrador', {
     user: [{
         type: mongoose.Schema.Types.ObjectId,
         ref:'users'
-    }]
+    }],
+    marca_temporal: String
 },'archivoscomprobantesahorrador'); //Added because a singular collection name

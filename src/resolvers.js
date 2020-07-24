@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { Lead } from "./models/Lead";
 import { Deposito } from "./models/Deposito";
 import { Boleta } from "./models/Boleta";
@@ -26,25 +27,11 @@ export const resolvers = {
               curr.user.apellido = topay.profile.apellido,
               curr.user.dni = topay.profile.dni
               ) : curr.user = {}//null
-              //curr.created = new Date(curr.created)
+              let _createdat = moment(curr.created)
+              curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY HH:mm:ss');
 
               return [...acc, curr]
           }, [])
-
-          //const depositos = res.map(deposito => {
-          //  let [topay] = users.filter(user => user.id === deposito.userId)
-          //  typeof topay !== "undefined" ? (
-          //    topay.id ? deposito.user.id = topay.id : deposito.user.id = "0",
-          //    deposito.user.createdAt = topay.createdAt,
-          //    deposito.user.username = topay.username,
-          //
-          //    deposito.user.nombre = topay.profile.nombre,
-          //    deposito.user.apellido = topay.profile.apellido,
-          //    deposito.user.dni = topay.profile.dni
-          //    //curr_deposito = {...deposito, ...topay.id, ...topay.createdAt, ...topay.username, ...topay.profile.nombre, ...topay.profile.apellido, ...topay.profile.dni }
-          //  ) : deposito.user = {}//null
-          //  return deposito
-          //})
           return depositos
         })
     },
@@ -62,24 +49,20 @@ export const resolvers = {
             let [curr_pago] = res.filter(pago => pago.id === curr.pagoId)
             if (typeof curr_pago !== "undefined") {
               let [curr_user] = _users.filter(user => user.id === curr_pago.userId)
+              let descuento = (curr.monto * new Number(2)/100);
               if (typeof curr_user !== "undefined") {
 
                 let [curr_promo] = _promociones.filter(prom => prom.id === curr_pago.promoId)
                 if (typeof curr_promo !== "undefined") {
-                  let descuento = 0;
-                  
                   if (curr_promo.tipo === true) {
                     descuento = (curr.monto * (new Number(curr_promo.descuento) + new Number(2))) / 100
                     curr.tipo_descuento = 'porcentaje'
                   }
                   else if (curr_promo.tipo === false) {
-                    descuento = curr_promo.descuento
+                    descuento = new Number(curr_promo.descuento) + (curr.monto * new Number(2)/100)
                     curr.tipo_descuento = 'monto'
                   }
-                  curr.descuento = descuento
-                  curr.depositado = curr.monto - descuento
                 }
-                
                 curr_user.id ? curr.user.id = curr_user.id : curr.user.id = "0"
                 curr.user.createdAt = curr_user.createdAt
                 curr.user.username = curr_user.username
@@ -88,7 +71,11 @@ export const resolvers = {
                 curr.user.apellido = curr_user.profile.apellido
                 curr.user.dni = curr_user.profile.dni
               }
-              curr.marca_temporal = curr_pago.createdAt.toLocaleString()
+              //curr.marca_temporal = curr_pago.createdAt.toLocaleString()
+              let _createdat = moment(curr_pago.createdAt)
+              curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY HH:mm:ss');
+              curr.descuento = descuento
+              curr.depositado = curr.monto - descuento
             }
             else curr.user = {}//null
 

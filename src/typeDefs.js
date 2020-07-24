@@ -41,6 +41,7 @@ export const typeDefs = gql`
     created: String
     pendiente: String
     user: User
+    marca_temporal: String
   }
   type Boleta {
     id: ID!

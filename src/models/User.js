@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export const User = mongoose.model('users', {
     _id: String,
-    createdAt: String,
+    createdAt: Date,
     username: String,
     profile: {
         nombre: String,
