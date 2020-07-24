@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const pagoSchema = new Schema({
     _id: String,
     userId: String,
-    createdAt: String,
+    createdAt: Date,
     editable: Boolean,
     promoId: String,
     estado: String,

@@ -13,7 +13,7 @@ export const Deposito = mongoose.model('archivoscomprobantesahorrador', {
     pagoId: String,
     userId: String,
     aprobado: String,
-    created: String,
+    created: Date,
     pendiente: String,
     user: [{
         type: mongoose.Schema.Types.ObjectId,
