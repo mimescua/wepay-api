@@ -28,5 +28,6 @@ export const Boleta = mongoose.model('boletas', {
     }],
     descuento: String,
     depositado: String,
-    marca_temporal: String
+    marca_temporal: String,
+    tipo_descuento: String
 });

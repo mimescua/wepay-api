@@ -16,7 +16,7 @@ export const resolvers = {
         .then(async res => {
           const users = await User.find()
           const depositos  = res.reduce((acc, curr) => {
-            let [topay] = users.filter(user => user.id === deposito.userId)
+            let [topay] = users.filter(user => user.id === curr.userId)
               typeof topay !== "undefined" ? (
               topay.id ? curr.user.id = topay.id : curr.user.id = "0",
               curr.user.createdAt = topay.createdAt,
@@ -25,7 +25,8 @@ export const resolvers = {
               curr.user.nombre = topay.profile.nombre,
               curr.user.apellido = topay.profile.apellido,
               curr.user.dni = topay.profile.dni
-              ) : deposito.user = {}//null
+              ) : curr.user = {}//null
+              //curr.created = new Date(curr.created)
 
               return [...acc, curr]
           }, [])
@@ -66,11 +67,14 @@ export const resolvers = {
                 let [curr_promo] = _promociones.filter(prom => prom.id === curr_pago.promoId)
                 if (typeof curr_promo !== "undefined") {
                   let descuento = 0;
-                  if (curr_promo.tipo === 'true') {
-                    descuento = (curr.monto * (curr_promo.descuento + 2)) / 100
+                  
+                  if (curr_promo.tipo === true) {
+                    descuento = (curr.monto * (new Number(curr_promo.descuento) + new Number(2))) / 100
+                    curr.tipo_descuento = 'porcentaje'
                   }
-                  else if (curr_promo.tipo === 'false') {
+                  else if (curr_promo.tipo === false) {
                     descuento = curr_promo.descuento
+                    curr.tipo_descuento = 'monto'
                   }
                   curr.descuento = descuento
                   curr.depositado = curr.monto - descuento
