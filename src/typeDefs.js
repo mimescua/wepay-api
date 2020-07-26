@@ -59,10 +59,11 @@ export const typeDefs = gql`
     pago: Pago
     promocion: Promocion
 
+    comision_calc: Float
+    promocion_calc: Float
     descuento: Float
     depositado: Float
     marca_temporal: String
-    tipo_descuento: String
   }
   type Pago {
     id: ID!

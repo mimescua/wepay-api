@@ -49,19 +49,19 @@ export const resolvers = {
             let [curr_pago] = res.filter(pago => pago.id === curr.pagoId)
             if (typeof curr_pago !== "undefined") {
               let [curr_user] = _users.filter(user => user.id === curr_pago.userId)
-              let descuento = (curr.monto * new Number(2)/100);
+
+              let _comision = new Number(0)
+              let _promocion = new Number(0)
+              curr.comision ? _comision = (curr.monto * new Number(curr.comision)) / 100 : _comision = (curr.monto * new Number(2)) / 100
+              let _descuento = _comision
+              
               if (typeof curr_user !== "undefined") {
 
                 let [curr_promo] = _promociones.filter(prom => prom.id === curr_pago.promoId)
                 if (typeof curr_promo !== "undefined") {
-                  if (curr_promo.tipo === true) {
-                    descuento = (curr.monto * (new Number(curr_promo.descuento) + new Number(2))) / 100
-                    curr.tipo_descuento = 'porcentaje'
-                  }
-                  else if (curr_promo.tipo === false) {
-                    descuento = new Number(curr_promo.descuento) + (curr.monto * new Number(2)/100)
-                    curr.tipo_descuento = 'monto'
-                  }
+                  if (curr_promo.tipo === true) _promocion = (curr.monto * new Number(curr_promo.descuento)) / 100
+                  else if (curr_promo.tipo === false) _promocion = new Number(curr_promo.descuento)
+                  _descuento = _comision + _promocion
                 }
                 curr_user.id ? curr.user.id = curr_user.id : curr.user.id = "0"
                 curr.user.createdAt = curr_user.createdAt
@@ -71,11 +71,13 @@ export const resolvers = {
                 curr.user.apellido = curr_user.profile.apellido
                 curr.user.dni = curr_user.profile.dni
               }
-              //curr.marca_temporal = curr_pago.createdAt.toLocaleString()
               let _createdat = moment(curr_pago.createdAt)
               curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY HH:mm:ss');
-              curr.descuento = descuento
-              curr.depositado = curr.monto - descuento
+
+              curr.comision_calc = _comision
+              curr.promocion_calc = _promocion
+              curr.descuento = _descuento
+              curr.depositado = curr.monto - _descuento
             }
             else curr.user = {}//null
 

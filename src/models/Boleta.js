@@ -14,6 +14,7 @@ export const Boleta = mongoose.model('boletas', {
     estado : String,
     estadoRetirador : String,
     retiroId : String,
+    comision: String,
     user: [{
         type: Schema.Types.ObjectId,
         ref:'users'
@@ -29,5 +30,6 @@ export const Boleta = mongoose.model('boletas', {
     descuento: String,
     depositado: String,
     marca_temporal: String,
-    tipo_descuento: String
+    comision_calc: String,
+    promocion_calc: String
 });
