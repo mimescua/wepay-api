@@ -27,6 +27,7 @@ export const resolvers = {
               curr.user.apellido = topay.profile.apellido,
               curr.user.dni = topay.profile.dni
               ) : curr.user = {}//null
+              if(curr.fecha) curr.fecha = moment(curr.fecha).format('DD/MM/YYYY');
               let _createdat = moment(curr.created)
               curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY HH:mm:ss');
 
