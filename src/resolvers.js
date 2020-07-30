@@ -29,7 +29,8 @@ export const resolvers = {
               ) : curr.user = {}//null
               if(curr.fecha) curr.fecha = moment(curr.fecha).format('DD/MM/YYYY');
               let _createdat = moment(curr.created)
-              curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY HH:mm:ss');
+              //curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY HH:mm:ss');
+              curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY');
 
               return [...acc, curr]
           }, [])
@@ -74,6 +75,7 @@ export const resolvers = {
               }
               let _createdat = moment(curr_pago.createdAt)
               curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY HH:mm:ss');
+              if(curr.vence) curr.vence = moment(curr.vence).format('DD/MM/YYYY');
 
               curr.comision_calc = _comision
               curr.promocion_calc = _promocion
