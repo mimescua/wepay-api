@@ -74,7 +74,8 @@ export const resolvers = {
                 curr.user.dni = curr_user.profile.dni
               }
               let _createdat = moment(curr_pago.createdAt)
-              curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY HH:mm:ss');
+              //curr.marca_temporal = _createdat.utc().local().format('DD/MM/YYYY HH:mm:ss');
+              curr.marca_temporal = _createdat.utcOffset(-5 * 60).format('DD/MM/YYYY HH:mm:ss');
               if(curr.vence) curr.vence = moment(curr.vence).format('DD/MM/YYYY');
 
               curr.comision_calc = _comision
