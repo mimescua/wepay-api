@@ -5,8 +5,10 @@ export const typeDefs = gql`
   type Query {
     say_hello: String!
     leads: [Lead!]!
+    leadslp: [Leadlp!]!
     depositos: [Deposito!]!
     boletas: [Boleta!]!
+    users: [User]!
   }
   type Lead {
     id: ID!
@@ -18,14 +20,27 @@ export const typeDefs = gql`
     dni: String
     tipo: String
   }
+  type Leadlp {
+    id: ID!
+    nombres: String
+    email: String
+    celular: String
+    monto: String
+    tarjeta: String
+    origen: String
+    createdAt: String
+  }
   type User {
     id: ID
     createdAt: String
     username: String
-
+    
     nombre: String
     apellido: String
     dni: String
+    celular: String
+    email: String
+    roles: [String]
   }
   type Deposito {
     id: ID!
