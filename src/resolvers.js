@@ -35,8 +35,10 @@ export const resolvers = {
       return Deposito.find()
         .then(async res => {
           const users = await User.find()
+          const pagos = await Pago.find()
           const depositos  = res.reduce((acc, curr) => {
             let [topay] = users.filter(user => user.id === curr.userId)
+            let [pago] = pagos.filter(pag => pag.id === curr.pagoId)
               typeof topay !== "undefined" ? (
               topay.id ? curr.user.id = topay.id : curr.user.id = "0",
               curr.user.createdAt = topay.createdAt,
@@ -47,8 +49,10 @@ export const resolvers = {
               curr.user.dni = topay.profile.dni
               ) : curr.user = {}//null
               if(curr.fecha) curr.fecha = moment(curr.fecha).format('DD/MM/YYYY');
-              let _createdat = moment(curr.created)
-              curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY HH:mm:ss');
+
+              if(pago) curr.marca_temporal = moment(pago.createdAt).format('DD/MM/YYYY HH:mm:ss');
+              //let _createdat = moment(curr.created)
+              //curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY HH:mm:ss');
               //curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY');
 
               return [...acc, curr]
