@@ -41,6 +41,7 @@ export const typeDefs = gql`
     celular: String
     email: String
     roles: [String]
+    marca_temporal: String
   }
   type Deposito {
     id: ID!

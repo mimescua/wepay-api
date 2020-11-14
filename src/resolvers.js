@@ -50,7 +50,10 @@ export const resolvers = {
               ) : curr.user = {}//null
               if(curr.fecha) curr.fecha = moment(curr.fecha).format('DD/MM/YYYY');
 
-              if(pago) curr.marca_temporal = moment(pago.createdAt).format('DD/MM/YYYY HH:mm:ss');
+              if(pago){
+                let _createdat = moment(pago.createdAt)
+                curr.marca_temporal = _createdat.utcOffset(-5 * 60).format('DD/MM/YYYY HH:mm:ss');
+              }
               //let _createdat = moment(curr.created)
               //curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY HH:mm:ss');
               //curr.marca_temporal = _createdat.utc().format('DD/MM/YYYY');
@@ -118,15 +121,18 @@ export const resolvers = {
     users: () => {
       return User.find()
       .then(async res => {
+        let _createdat;
         const leadslps = res.reduce((acc, curr) => {
           curr.id,
-          curr.createdAt = moment(curr.createdAt).format('DD/MM/YYYY HH:mm:ss');
-          curr.username,
-          curr.nombre = curr.profile.nombre,
-          curr.apellido = curr.profile.apellido,
-          curr.dni = curr.profile.dni,
-          curr.celular = curr.profile.celular,
-          curr.email = curr.emails[0].address,
+          _createdat = moment(curr.createdAt)
+          curr.marca_temporal = _createdat.utcOffset(-5 * 60).format('DD/MM/YYYY HH:mm:ss')
+          //curr.createdAt = moment(curr.createdAt).format('DD/MM/YYYY HH:mm:ss');
+          curr.username
+          curr.nombre = curr.profile.nombre
+          curr.apellido = curr.profile.apellido
+          curr.dni = curr.profile.dni
+          curr.celular = curr.profile.celular
+          curr.email = curr.emails[0].address
           curr.roles = curr.roles? curr.roles : null
           
           return [...acc, curr]
