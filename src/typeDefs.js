@@ -7,7 +7,9 @@ export const typeDefs = gql`
     leads: [Lead!]!
     leadslp: [Leadlp!]!
     depositos: [Deposito!]!
+    depositos_upd(last_id: String): [Deposito!]!
     boletas: [Boleta!]!
+    boletas_upd(last_id: String): [Boleta!]!
     users: [User]!
   }
   type Lead {
