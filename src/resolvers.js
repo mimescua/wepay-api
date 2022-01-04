@@ -6,7 +6,12 @@ import { Boleta } from "./models/Boleta";
 import { User } from "./models/User";
 import { Pago } from "./models/Pago";
 import { Promocion } from "./models/Promocion";
+import { PagosReales } from "./models/PagosReales"
 
+//function isEmptyObject(obj){
+//  return JSON.stringify(obj) === '{}';
+//}
+const isEmptyObject = (obj) => JSON.stringify(obj) === '{}';
 //// Provide resolver functions for your schema fields
 export const resolvers = {
   Query: {
@@ -241,5 +246,42 @@ export const resolvers = {
         return leadslps
       })
     },
+    pagos_reales: () => {
+      return PagosReales.find()//.limit(10)
+        .then(async res => {
+          const pReales  = res.reduce((acc, curr, indx) => {
+            let _comision = new Number(0)
+            let _promocion = new Number(0)
+
+            //if(pagos) curr.pagos.createdAt = curr.pagos.createdAt.toISOString()//moment(curr.pagos.createdAt).utcOffset(-5 * 60).format('DD/MM/YYYY HH:mm:ss')
+            //if(depositos) curr.depositos.created = curr.depositos.created.toISOString()
+            if(curr.boletas){
+              curr.boletas.comision ?
+              _comision = (curr.boletas.monto * new Number(curr.boletas.comision)) / 100 :
+              _comision = (curr.boletas.monto * new Number(2)) / 100
+            }
+            let _descuento = _comision
+            if(curr.users){
+              const{_id,createdAt,username}  = curr.users
+              const{nombre,apellido,dni,nacimiento,celular,email,referidorId,codigoUdsado,firstTime} = curr.users.profile
+              curr.users = {_id,createdAt,username,nombre,apellido,dni,nacimiento,celular,email,referidorId,codigoUdsado,firstTime}
+            }
+            if(curr.promociones && !isEmptyObject(curr.promociones)){
+              curr.promociones.tipo?
+                _promocion = (curr.promociones.monto * new Number(curr.promociones.descuento)) / 100 :
+                _promocion = new Number(curr.promociones.descuento);
+                _descuento = _comision + _promocion;
+            }
+            curr.id =indx+1
+            curr.descuento = _descuento
+            curr.depositado  = curr.boletas.monto - _descuento
+            curr.marca_temporal = moment(curr.pagos.createdAt).utcOffset(-5 * 60).format('DD/MM/YYYY HH:mm:ss');
+            curr.comision_calc = _comision
+            curr.promocion_calc = _promocion
+            return [...acc, curr]
+          }, [])
+          return pReales
+        })
+    }
   }
 };

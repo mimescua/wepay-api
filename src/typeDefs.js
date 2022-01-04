@@ -11,6 +11,7 @@ export const typeDefs = gql`
     boletas: [Boleta!]!
     boletas_upd(last_id: String): [Boleta!]!
     users: [User]!
+    pagos_reales: [PagosReales]
   }
   type Lead {
     id: ID!
@@ -98,5 +99,78 @@ export const typeDefs = gql`
     codigo: String,
     descuento: String,
     tipo: Boolean
+  }
+
+  type xPago {
+    _id: ID!
+    userId: String
+    createdAt: String
+    editable: Boolean
+    promoId: String
+    estado: String
+    voucher: String
+    operacion: String
+  }
+  type xDeposito {
+    _id: String
+    url: String
+    name: String
+    operacion: String
+    monto: String
+    fecha: String
+    banco: String
+    pagoId: String
+    userId: String
+    aprobado: Boolean
+    created: String
+    pendiente: Boolean
+  }
+  type xBoleta {
+    _id: ID!
+    pagoId: String
+    servicio: String
+    codigo: String
+    contrasenia: String
+    monto: String
+    vence: String
+    seleccionada: Boolean
+    estado: String
+    voucher_retirador: String
+    estadoRetirador: String
+    retiroId: String
+    createdAt: String
+  }
+  type xUser {
+    _id: ID
+    createdAt: String
+    username: String
+    nombre: String
+    apellido: String
+    dni: String
+    nacimiento: String
+    celular: String
+    referidorId: String
+    codigoUdsado: Boolean
+    firstTime: Boolean
+    roles: [String]
+  }
+  type xPromocion {
+    _id: ID
+    codigo: String
+    descuento: String
+    tipo: Boolean
+  }
+  type PagosReales {
+    id: ID!
+    descuento: String
+    depositado: String
+    marca_temporal: String
+    comision_calc: String
+    promocion_calc: String
+    pagos: xPago
+    depositos: xDeposito
+    boletas: xBoleta
+    users: xUser
+    promociones: xPromocion
   }
 `;
