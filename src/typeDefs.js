@@ -153,6 +153,7 @@ export const typeDefs = gql`
     codigoUdsado: Boolean
     firstTime: Boolean
     roles: [String]
+    email: String
   }
   type xPromocion {
     _id: ID

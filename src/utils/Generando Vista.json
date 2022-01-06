@@ -1,0 +1,73 @@
+db.createView(
+   "pagos_view",
+    "pagos",
+    [
+        {
+            "$project": {
+                "_id": NumberInt(0),
+                "pagos": "$$ROOT"
+            }
+        },
+        {
+            "$lookup": {
+                "localField": "pagos._id",
+                "from": "archivoscomprobantesahorrador",
+                "foreignField": "pagoId",
+                "as": "depositos"
+            }
+        },
+        {
+            "$unwind": {
+                "path": "$depositos",
+                "preserveNullAndEmptyArrays": false
+            }
+        },
+        {
+            "$lookup": {
+                "localField": "pagos._id",
+                "from": "boletas",
+                "foreignField": "pagoId",
+                "as": "boletas"
+            }
+        },
+        {
+            "$unwind": {
+                "path": "$boletas",
+                "preserveNullAndEmptyArrays": false
+            }
+        },
+        {
+            "$lookup": {
+                "localField": "pagos.userId",
+                "from": "users",
+                "foreignField": "_id",
+                "as": "users"
+            }
+        },
+        {
+            "$unwind": {
+                "path": "$users",
+                "preserveNullAndEmptyArrays": true
+            }
+        },
+        {
+            "$lookup": {
+                "localField": "pagos.promoId",
+                "from": "promocionesahorradores",
+                "foreignField": "_id",
+                "as": "promociones"
+            }
+        },
+        {
+            "$unwind": {
+                "path": "$promociones",
+                "preserveNullAndEmptyArrays": true
+            }
+        },
+        {
+            "$match": {
+                "pagos.editable": false
+            }
+        }
+    ]
+);

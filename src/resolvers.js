@@ -8,11 +8,9 @@ import { Pago } from "./models/Pago";
 import { Promocion } from "./models/Promocion";
 import { PagosReales } from "./models/PagosReales"
 
-//function isEmptyObject(obj){
-//  return JSON.stringify(obj) === '{}';
-//}
 const isEmptyObject = (obj) => JSON.stringify(obj) === '{}';
-//// Provide resolver functions for your schema fields
+const isEmptyArray = (obj) => JSON.stringify(obj) === '[]';
+
 export const resolvers = {
   Query: {
     say_hello: () => "Hi, I'm a robot",
@@ -253,7 +251,7 @@ export const resolvers = {
             let _comision = new Number(0)
             let _promocion = new Number(0)
 
-            //if(pagos) curr.pagos.createdAt = curr.pagos.createdAt.toISOString()//moment(curr.pagos.createdAt).utcOffset(-5 * 60).format('DD/MM/YYYY HH:mm:ss')
+            //if(pagos) curr.pagos.createdAt = curr.pagos.createdAt.toISOString()
             //if(depositos) curr.depositos.created = curr.depositos.created.toISOString()
             if(curr.boletas){
               curr.boletas.comision ?
@@ -263,7 +261,9 @@ export const resolvers = {
             let _descuento = _comision
             if(curr.users){
               const{_id,createdAt,username}  = curr.users
-              const{nombre,apellido,dni,nacimiento,celular,email,referidorId,codigoUdsado,firstTime} = curr.users.profile
+              const{nombre,apellido,dni,nacimiento,celular,referidorId,codigoUdsado,firstTime} = curr.users.profile
+              let email = null
+              if(curr.users.emails && !isEmptyArray(curr.users.emails)) email = curr.users.emails[0].address;
               curr.users = {_id,createdAt,username,nombre,apellido,dni,nacimiento,celular,email,referidorId,codigoUdsado,firstTime}
             }
             if(curr.promociones && !isEmptyObject(curr.promociones)){
