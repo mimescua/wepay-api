@@ -11,7 +11,7 @@ export const typeDefs = gql`
     boletas: [Boleta!]!
     boletas_upd(last_id: String): [Boleta!]!
     users: [User]!
-    pagos_reales: [PagosReales]
+    pagos_reales(desde: String, hasta: String ): [PagosReales]
   }
   type Lead {
     id: ID!

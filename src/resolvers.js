@@ -10,6 +10,10 @@ import { PagosReales } from "./models/PagosReales"
 
 const isEmptyObject = (obj) => JSON.stringify(obj) === '{}';
 const isEmptyArray = (obj) => JSON.stringify(obj) === '[]';
+const tomorrowSameHour = (today = new Date()) => {
+  today.setDate(today.getDate() + 1)
+  return today
+}
 
 export const resolvers = {
   Query: {
@@ -244,8 +248,12 @@ export const resolvers = {
         return leadslps
       })
     },
-    pagos_reales: () => {
-      return PagosReales.find()//.limit(10)
+    pagos_reales: (_, { desde, hasta }) => {
+      let milliseconds = new Date().getTime()
+      desde? desde = moment(desde, 'DD/MM/YYYY HH:mm:ss').utcOffset(0 * 60) : desde = new Date(0)
+      hasta? hasta = moment(hasta, 'DD/MM/YYYY HH:mm:ss').utcOffset(0 * 60) : hasta = tomorrowSameHour()
+
+      return PagosReales.find({ "pagos.createdAt": { $gte: desde, $lt: hasta } })//.limit(10)
         .then(async res => {
           const pReales  = res.reduce((acc, curr, indx) => {
             let _comision = new Number(0)
@@ -272,12 +280,14 @@ export const resolvers = {
                 _promocion = new Number(curr.promociones.descuento);
                 _descuento = _comision + _promocion;
             }
-            curr.id =indx+1
+            curr.id =milliseconds+1
             curr.descuento = _descuento
             curr.depositado  = curr.boletas.monto - _descuento
             curr.marca_temporal = moment(curr.pagos.createdAt).utcOffset(-5 * 60).format('DD/MM/YYYY HH:mm:ss');
             curr.comision_calc = _comision
             curr.promocion_calc = _promocion
+
+            milliseconds++
             return [...acc, curr]
           }, [])
           return pReales
