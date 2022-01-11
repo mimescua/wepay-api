@@ -248,12 +248,16 @@ export const resolvers = {
         return leadslps
       })
     },
-    pagos_reales: (_, { desde, hasta }) => {
+    pagos_reales: async(_, { last_id, desde, hasta }) => {
       let milliseconds = new Date().getTime()
       desde? desde = moment(desde, 'DD/MM/YYYY HH:mm:ss').utcOffset(0 * 60) : desde = new Date(0)
       hasta? hasta = moment(hasta, 'DD/MM/YYYY HH:mm:ss').utcOffset(0 * 60) : hasta = tomorrowSameHour()
+      if (last_id) {
+        const last_pago = await PagosReales.find({ "pagos._id": { $eq: last_id } })
+        if (last_pago && !isEmptyArray(last_pago)) desde = last_pago[0].pagos.createdAt
+      }
 
-      return PagosReales.find({ "pagos.createdAt": { $gte: desde, $lt: hasta } })//.limit(10)
+      return PagosReales.find({ "pagos.createdAt": { $gt: desde, $lt: hasta } })//.limit(10)
         .then(async res => {
           const pReales  = res.reduce((acc, curr, indx) => {
             let _comision = new Number(0)
