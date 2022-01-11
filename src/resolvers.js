@@ -259,12 +259,16 @@ export const resolvers = {
             let _comision = new Number(0)
             let _promocion = new Number(0)
 
-            //if(pagos) curr.pagos.createdAt = curr.pagos.createdAt.toISOString()
-            //if(depositos) curr.depositos.created = curr.depositos.created.toISOString()
+            //if(curr.pagos) curr.pagos.createdAt = curr.pagos.createdAt.toISOString()
+            //if(curr.depositos) {
+            //  //curr.depositos.created = curr.depositos.created.toISOString()
+            //  if(curr.depositos.fecha && !curr.depositos.fecha.includes("/")) curr.depositos.fecha = moment(curr.depositos.fecha).format("DD/MM/YYYY")
+            //}
             if(curr.boletas){
               curr.boletas.comision ?
-              _comision = (curr.boletas.monto * new Number(curr.boletas.comision)) / 100 :
-              _comision = (curr.boletas.monto * new Number(2)) / 100
+              _comision = (new Number(curr.boletas.monto) * new Number(curr.boletas.comision)) / 100 :
+              _comision = (new Number(curr.boletas.monto) * new Number(2)) / 100
+              //if(curr.boletas.vence && !curr.boletas.vence.includes("/")) curr.boletas.vence = moment(curr.boletas.vence).format("DD/MM/YYYY")
             }
             let _descuento = _comision
             if(curr.users){
@@ -276,13 +280,17 @@ export const resolvers = {
             }
             if(curr.promociones && !isEmptyObject(curr.promociones)){
               curr.promociones.tipo?
-                _promocion = (curr.promociones.monto * new Number(curr.promociones.descuento)) / 100 :
-                _promocion = new Number(curr.promociones.descuento);
+                (curr.promociones.monto?
+                  _promocion = (curr.promociones.monto * new Number(curr.promociones.descuento)) / 100 :
+                  _promocion = new Number(curr.promociones.descuento)
+                ) : (
+                  _promocion = new Number(curr.promociones.descuento)
+                )
                 _descuento = _comision + _promocion;
             }
             curr.id =milliseconds+1
             curr.descuento = _descuento
-            curr.depositado  = curr.boletas.monto - _descuento
+            curr.depositado  = new Number(curr.boletas.monto) - _descuento
             curr.marca_temporal = moment(curr.pagos.createdAt).utcOffset(-5 * 60).format('DD/MM/YYYY HH:mm:ss');
             curr.comision_calc = _comision
             curr.promocion_calc = _promocion
