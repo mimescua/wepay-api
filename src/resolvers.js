@@ -264,15 +264,15 @@ export const resolvers = {
             let _promocion = new Number(0)
 
             //if(curr.pagos) curr.pagos.createdAt = curr.pagos.createdAt.toISOString()
-            //if(curr.depositos) {
-            //  //curr.depositos.created = curr.depositos.created.toISOString()
-            //  if(curr.depositos.fecha && !curr.depositos.fecha.includes("/")) curr.depositos.fecha = moment(curr.depositos.fecha).format("DD/MM/YYYY")
-            //}
+            if(curr.depositos) {
+              //curr.depositos.created = curr.depositos.created.toISOString()
+              if(curr.depositos.fecha && !curr.depositos.fecha.includes("/")) curr.depositos.fecha = moment(curr.depositos.fecha).format("DD/MM/YYYY")
+            }
             if(curr.boletas){
-              curr.boletas.comision ?
+              curr.boletas.comision?
               _comision = (new Number(curr.boletas.monto) * new Number(curr.boletas.comision)) / 100 :
               _comision = (new Number(curr.boletas.monto) * new Number(2)) / 100
-              //if(curr.boletas.vence && !curr.boletas.vence.includes("/")) curr.boletas.vence = moment(curr.boletas.vence).format("DD/MM/YYYY")
+              if(curr.boletas.vence && !curr.boletas.vence.includes("/")) curr.boletas.vence = moment(curr.boletas.vence).format("DD/MM/YYYY")
             }
             let _descuento = _comision
             if(curr.users){
