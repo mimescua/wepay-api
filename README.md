@@ -1,2 +1,2 @@
-# api-wepayu
-A GraphQL-MongoDB API
+# WePay API
+Payments & reports API using GraphQL and MongoDB. 🚀
